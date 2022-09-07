@@ -3,6 +3,7 @@ package br.com.alura.forum.service
 import br.com.alura.forum.dto.AtualizacaoTopicoForm
 import br.com.alura.forum.dto.NovoTopicoForm
 import br.com.alura.forum.dto.TopicoView
+import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Topico
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Service
 class TopicoService(
     private var topicos: List<Topico> = ArrayList(),
     private val topicoViewMapper: TopicoViewMapper,
-    private val topicoFormMapper: TopicoFormMapper
+    private val topicoFormMapper: TopicoFormMapper,
+    private val notFoundMessage: String = "Tópico não encontrado!"
 ) {
 
     fun listar(): List<TopicoView> {
@@ -22,9 +24,11 @@ class TopicoService(
     }
 
     fun buscarPorId(id: Long): TopicoView {
-        return topicoViewMapper.map(
-            topicos.first { it.id!! == id }
-        )
+        try {
+            return topicoViewMapper.map(topicos.first { it.id!! == id })
+        } catch (ex: Exception) {
+            throw NotFoundException(notFoundMessage)
+        }
     }
 
     fun cadastrar(form: NovoTopicoForm): TopicoView {
@@ -35,7 +39,14 @@ class TopicoService(
     }
 
     fun atualizar(form: AtualizacaoTopicoForm): TopicoView {
-        val topico = topicos.first { it.id!! == form.id }
+        val topico: Topico
+
+        try {
+            topico = topicos.first { it.id!! == form.id }
+        } catch (ex: Exception) {
+            throw NotFoundException(notFoundMessage)
+        }
+
         val topicoAtualizado = Topico(
             id = form.id,
             titulo = form.titulo,
@@ -52,6 +63,10 @@ class TopicoService(
     }
 
     fun deletar(id: Long) {
-        topicos = topicos.minus(topicos.first { it.id!! == id })
+        try {
+            topicos = topicos.minus(topicos.first { it.id!! == id })
+        } catch (ex: Exception) {
+            throw NotFoundException(notFoundMessage)
+        }
     }
 }
