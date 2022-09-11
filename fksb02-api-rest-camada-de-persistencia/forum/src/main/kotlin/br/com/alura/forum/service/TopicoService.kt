@@ -7,25 +7,26 @@ import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Topico
+import br.com.alura.forum.repository.TopicoRepository
 import org.springframework.stereotype.Service
 
 @Service
 class TopicoService(
-    private var topicos: List<Topico> = ArrayList(),
+    private val repository: TopicoRepository,
     private val topicoViewMapper: TopicoViewMapper,
     private val topicoFormMapper: TopicoFormMapper,
     private val notFoundMessage: String = "Tópico não encontrado!"
 ) {
 
     fun listar(): List<TopicoView> {
-        return topicos.map { topico ->
+        return repository.findAll().map { topico ->
             topicoViewMapper.map(topico)
         }.toList()
     }
 
     fun buscarPorId(id: Long): TopicoView {
         try {
-            return topicoViewMapper.map(topicos.first { it.id!! == id })
+            return topicoViewMapper.map(repository.getReferenceById(id))
         } catch (ex: Exception) {
             throw NotFoundException(notFoundMessage)
         }
@@ -33,8 +34,7 @@ class TopicoService(
 
     fun cadastrar(form: NovoTopicoForm): TopicoView {
         val topico = topicoFormMapper.map(form)
-        topico.id = topicos.size.toLong() + 1
-        topicos = topicos.plus(topico)
+        repository.save(topico)
         return topicoViewMapper.map(topico)
     }
 
@@ -42,29 +42,18 @@ class TopicoService(
         val topico: Topico
 
         try {
-            topico = topicos.first { it.id!! == form.id }
+            topico = repository.getReferenceById(form.id)
         } catch (ex: Exception) {
             throw NotFoundException(notFoundMessage)
         }
-
-        val topicoAtualizado = Topico(
-            id = form.id,
-            titulo = form.titulo,
-            mensagem = form.mensagem,
-            autor = topico.autor,
-            curso = topico.curso,
-            respostas = topico.respostas,
-            status = topico.status,
-            dataCriacao = topico.dataCriacao
-        )
-
-        topicos = topicos.minus(topico).plus(topicoAtualizado)
-        return topicoViewMapper.map(topicoAtualizado)
+        topico.titulo = form.titulo
+        topico.mensagem = form.mensagem
+        return topicoViewMapper.map(topico)
     }
 
     fun deletar(id: Long) {
         try {
-            topicos = topicos.minus(topicos.first { it.id!! == id })
+            repository.deleteById(id)
         } catch (ex: Exception) {
             throw NotFoundException(notFoundMessage)
         }

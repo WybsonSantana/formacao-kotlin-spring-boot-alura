@@ -6,6 +6,7 @@ import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.service.TopicoService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 import javax.validation.Valid
@@ -22,11 +23,13 @@ class TopicoController(
     }
 
     @GetMapping("/{id}")
+    @Transactional
     fun buscarPorId(@PathVariable id: Long): TopicoView {
         return service.buscarPorId(id)
     }
 
     @PostMapping
+    @Transactional
     fun cadastrar(
         @RequestBody @Valid form: NovoTopicoForm,
         uriBuilder: UriComponentsBuilder
@@ -37,6 +40,7 @@ class TopicoController(
     }
 
     @PutMapping
+    @Transactional
     fun atualizar(@RequestBody @Valid form: AtualizacaoTopicoForm): ResponseEntity<TopicoView> {
         return ResponseEntity.ok(service.atualizar(form))
     }

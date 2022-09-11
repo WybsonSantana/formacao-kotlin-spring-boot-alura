@@ -5,12 +5,12 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 data class NovoTopicoForm(
-    @field: NotEmpty(message = "O título tem que ter entre 5 e 100 caracteres")
-    @field: Size(min = 5, max = 100)
+    @field: NotEmpty
+    @field: Size(min = 5, max = 100, message = "O título deve ter entre 5 e 100 caracteres")
     val titulo: String,
 
-    @field: NotEmpty(message = "A mensagem tem que ter entre 10 e 500 caracteres")
-    @field: Size(min = 10, max = 500)
+    @field: NotEmpty
+    @field: Size(min = 10, max = 500, message = "A mensagem deve ter entre 10 e 500 caracteres")
     val mensagem: String,
 
     @field: NotNull
