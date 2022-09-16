@@ -2,6 +2,7 @@ package br.com.alura.forum.service
 
 import br.com.alura.forum.dto.AtualizacaoTopicoForm
 import br.com.alura.forum.dto.NovoTopicoForm
+import br.com.alura.forum.dto.TopicoPorCategoriaDTO
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.TopicoFormMapper
@@ -11,16 +12,19 @@ import br.com.alura.forum.repository.TopicoRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import javax.persistence.EntityManager
 
 @Service
 class TopicoService(
     private val repository: TopicoRepository,
     private val topicoViewMapper: TopicoViewMapper,
     private val topicoFormMapper: TopicoFormMapper,
-    private val notFoundMessage: String = "Tópico não encontrado!"
+    private val notFoundMessage: String = "Tópico não encontrado!",
+    private val entityManager: EntityManager
 ) {
 
     fun listar(nomeCurso: String?, paginacao: Pageable): Page<TopicoView> {
+        //println(entityManager)
         val topicos = if (nomeCurso == null) {
             repository.findAll(paginacao)
         } else {
@@ -64,5 +68,9 @@ class TopicoService(
         } catch (ex: Exception) {
             throw NotFoundException(notFoundMessage)
         }
+    }
+
+    fun gerarRelatorio(paginacao: Pageable): Page<TopicoPorCategoriaDTO> {
+        return repository.gerarRelatorio(paginacao)
     }
 }
