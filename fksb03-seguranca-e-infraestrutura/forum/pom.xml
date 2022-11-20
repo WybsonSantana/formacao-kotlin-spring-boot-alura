@@ -93,6 +93,11 @@
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
@@ -127,7 +132,7 @@
 
     <profiles>
         <profile>
-            <id>dev</id>
+          <id>dev</id>
             <properties>
                 <activatedProperties>dev</activatedProperties>
             </properties>
