@@ -11,9 +11,9 @@ data class NovoTopicoForm(
 
     @field: NotEmpty
     @field: Size(min = 10, max = 500, message = "A mensagem deve ter entre 10 e 500 caracteres")
-    val mensagem: String,
+val mensagem: String,
 
-    @field: NotNull
+@field: NotNull
     val idCurso: Long,
 
     @field: NotNull

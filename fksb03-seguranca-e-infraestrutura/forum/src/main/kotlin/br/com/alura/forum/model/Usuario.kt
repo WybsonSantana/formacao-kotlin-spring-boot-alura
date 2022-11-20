@@ -1,6 +1,8 @@
 package br.com.alura.forum.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 import javax.persistence.*
 
 @Entity
@@ -15,5 +17,5 @@ data class Usuario(
 @JsonIgnore
 @ManyToMany(fetch = FetchType.EAGER)
 @JoinColumn(name = "usuario_role")
-    val role:List<Role> = mutableListOf()
+    val role: List<Role> = mutableListOf()
 )

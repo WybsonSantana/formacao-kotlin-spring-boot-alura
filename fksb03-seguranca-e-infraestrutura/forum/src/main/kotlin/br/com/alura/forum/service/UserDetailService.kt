@@ -2,12 +2,12 @@ package br.com.alura.forum.service
 
 import br.com.alura.forum.model.Role
 import br.com.alura.forum.model.Usuario
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.stereotype.Service
 
 class UserDetailService(
     private val usuario: Usuario
-): UserDetails {
+) : UserDetails {
 
     override fun getAuthorities(): List<Role> = usuario.role
 
