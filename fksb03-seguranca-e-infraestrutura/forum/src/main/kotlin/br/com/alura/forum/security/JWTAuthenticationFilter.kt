@@ -17,9 +17,7 @@ class JWTAuthenticationFilter(
         filterChain: FilterChain
     ) {
         val token = request.getHeader("Authorization")
-        println("token: $token")
         val jwt = getTokenDetail(token)
-        println("jwt: $jwt")
 
         if (jwtUtil.isValid(jwt)) {
             val authentication = jwtUtil.getAuthentication(jwt)
