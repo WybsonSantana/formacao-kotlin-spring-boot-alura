@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: D:\projects\kotlin\formacao-kotlin-spring-boot-alura\fksb01-
+ api-rest-camada-web\forum\src\main\kotlin\br\com\alura\forum\ForumAppli
+ cation
+
