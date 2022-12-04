@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  mysql:
+    container_name: db_forum_container
+    image: mysql:8.0.31
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: forum
+    volumes:
+      - mysql:/data/mysql
+    ports:
+      - 3306:3306
+
+volumes:
+  mysql:
