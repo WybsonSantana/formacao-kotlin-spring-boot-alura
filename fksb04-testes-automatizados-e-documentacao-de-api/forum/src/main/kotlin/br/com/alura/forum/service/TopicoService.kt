@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import javax.persistence.EntityManager
 
 @Service
 class TopicoService(
@@ -21,7 +20,6 @@ class TopicoService(
     private val topicoViewMapper: TopicoViewMapper,
     private val topicoFormMapper: TopicoFormMapper,
     private val notFoundMessage: String = "Tópico não encontrado!",
-    private val entityManager: EntityManager
 ) {
 
     fun listar(nomeCurso: String?, paginacao: Pageable): Page<TopicoView> {
