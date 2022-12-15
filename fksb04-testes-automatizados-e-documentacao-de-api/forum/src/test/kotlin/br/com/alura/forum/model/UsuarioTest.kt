@@ -8,4 +8,10 @@ object UsuarioTest {
         email = "beltrano@mail.com",
         password = "123456"
     )
+
+    fun buildToToken() = Usuario(
+        nome = "Fulano de Tal",
+        email = "fulanodetal@mail.com",
+        password = "123456"
+    )
 }
