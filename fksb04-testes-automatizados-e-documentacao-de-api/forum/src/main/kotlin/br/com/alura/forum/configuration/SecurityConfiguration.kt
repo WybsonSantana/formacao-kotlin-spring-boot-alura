@@ -30,6 +30,8 @@ class SecurityConfiguration(
             .authorizeHttpRequests()
             .antMatchers("/topicos").hasAuthority("LEITURA_ESCRITA")
             .antMatchers(HttpMethod.POST, "/login").permitAll()
+            .antMatchers(HttpMethod.GET, "/swagger-ui/*").permitAll()
+            .antMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
             .anyRequest().authenticated().and()
 
             http.addFilterBefore(JWTLoginFilter(authManager = configuration.authenticationManager, jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
