@@ -12,5 +12,16 @@ services:
     ports:
       - 3306:3306
 
+  cache:
+    container_name: redis_local
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - cache:/data\redis
+
 volumes:
   mysql:
+  cache:
+    driver: local
