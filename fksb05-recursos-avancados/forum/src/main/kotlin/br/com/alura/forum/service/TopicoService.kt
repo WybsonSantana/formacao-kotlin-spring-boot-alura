@@ -78,7 +78,7 @@ class TopicoService(
     }
 
     @Cacheable("gerarRelatorio")
-    fun gerarRelatorio(paginacao: Pageable): Page<TopicoPorCategoriaDTO> {
-        return repository.gerarRelatorio(paginacao)
+    fun gerarRelatorio(): List<TopicoPorCategoriaDTO> {
+        return repository.gerarRelatorio()
     }
 }

@@ -62,11 +62,4 @@ class TopicoController(
         service.deletar(id)
         return ResponseEntity<Unit>(HttpStatus.NO_CONTENT)
     }
-
-    @GetMapping("/relatorio")
-    fun gerarRelatorio(
-        @PageableDefault(size = 5) paginacao: Pageable
-    ): Page<TopicoPorCategoriaDTO> {
-        return service.gerarRelatorio(paginacao)
-    }
 }
