@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
+import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -19,7 +20,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class TopicoRepositoryTest {
 
-    @Autowired
+            @Autowired
     private lateinit var repository: TopicoRepository
 
     private val paginacao = PageRequest.of(0, 5)
@@ -33,12 +34,20 @@ class TopicoRepositoryTest {
             withPassword("123456")
         }
 
+        @Container
+        private val redisContainer = GenericContainer<Nothing>("redis:latest").apply {
+            withExposedPorts(6379)
+        }
+
         @JvmStatic
         @DynamicPropertySource
         fun properties(registry: DynamicPropertyRegistry) {
             registry.add("spring.datasource.url", mySqlContainer::getJdbcUrl)
             registry.add("spring.datasource.username", mySqlContainer::getUsername)
             registry.add("spring.datasource.password", mySqlContainer::getPassword)
+
+registry.add("spring.redis.host", redisContainer::getContainerIpAddress)
+            registry.add("spring.redis.port", redisContainer::getFirstMappedPort)
         }
     }
 
@@ -46,7 +55,7 @@ class TopicoRepositoryTest {
     fun `deveria gerar um relatorio`() {
         repository.save(topico)
 
-        val relatorio = repository.gerarRelatorio(paginacao)
+        val relatorio = repository.gerarRelatorio()
 
         assertThat(relatorio).isNotNull
     }
